@@ -12,7 +12,7 @@ function App() {
     <Router>
       <div className="min-h-screen">
         <Navbar />
-        <main className="container mx-auto p-2">
+        <main className="p-1 md:p-2">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/mongodb" element={<MongoDB />} />

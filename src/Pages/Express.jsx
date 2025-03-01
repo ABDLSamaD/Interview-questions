@@ -1,5 +1,5 @@
 import React from "react";
-import Question from "../Components/Question";
+import QuestionsList from "../Components/Question";
 
 const Express = () => {
   const questions = [
@@ -74,20 +74,12 @@ app.post('/user', function(req, res) {
   ];
 
   return (
-    <div className="max-w-4xl mx-auto py-8 px-4">
+    <div className="max-w-full mx-auto md:p-5 p-2">
       <h2 className="text-3xl font-bold mb-8 text-center text-gray-800">
         Express.js Interview Questions
       </h2>
       <div className="space-y-6">
-        {questions.map((q, index) => (
-          <Question
-            key={index}
-            question={q.question}
-            shortAnswer={q.shortAnswer}
-            longAnswer={q.longAnswer}
-            codeExample={q.codeExample}
-          />
-        ))}
+        <QuestionsList questions={questions} />
       </div>
     </div>
   );

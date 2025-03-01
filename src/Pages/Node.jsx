@@ -1,133 +1,320 @@
 import React from "react";
-import Question from "../Components/Question";
+import QuestionsList from "../Components/Question";
 
 const Node = () => {
   const questions = [
     {
-      question: "What is Node.js?",
-      shortAnswer:
-        "A JavaScript runtime built on Chrome's V8 JavaScript engine.",
+      question: "What is the Node.js cluster module?",
+      shortAnswer: "Creates child processes to utilize multi-core systems.",
       longAnswer:
-        "Node.js is an open-source, cross-platform JavaScript runtime environment that executes JavaScript code outside of a browser. It allows developers to use JavaScript to write command line tools and for server-side scripting. Node.js uses an event-driven, non-blocking I/O model that makes it lightweight and efficient, perfect for data-intensive real-time applications that run across distributed devices.",
-    },
-    {
-      question: "What is the event loop in Node.js?",
-      shortAnswer:
-        "A mechanism that allows Node.js to perform non-blocking I/O operations.",
-      longAnswer:
-        "The event loop is what allows Node.js to perform non-blocking I/O operations despite the fact that JavaScript is single-threaded. It works by offloading operations to the system kernel whenever possible. The event loop is responsible for executing the code, collecting and processing events, and executing queued sub-tasks. Most modern kernels are multi-threaded, so they can handle multiple operations executing in the background. When one of these operations completes, the kernel tells Node.js so that the appropriate callback may be added to the poll queue to eventually be executed.",
-    },
-    {
-      question: "What is the purpose of module.exports in Node.js?",
-      shortAnswer:
-        "To expose functions, objects, or values from a module to be used in other files.",
-      longAnswer:
-        "module.exports is the object that's actually returned as the result of a require call. The exports variable is initially set to that same object (i.e. it's a shorthand), so in the module code you can add properties to exports or you can completely replace exports with a new object or function. This allows you to create modular code in Node.js, where you can separate your code into different files and expose only what you want to be accessible from outside the module.",
+        "The cluster module allows creating multiple Node.js processes (workers) that share server ports. The master process manages workers, distributing incoming connections using round-robin (except Windows).",
       codeExample: `
-// myModule.js
-module.exports = {
-  foo: function() {
-    console.log('Hello from foo');
-  },
-  bar: 'A bar string'
-};
-
-// main.js
-const myModule = require('./myModule');
-myModule.foo(); // Outputs: Hello from foo
-console.log(myModule.bar); // Outputs: A bar string
-      `,
+  const cluster = require('cluster');
+  if (cluster.isPrimary) {
+    for (let i = 0; i < 4; i++) cluster.fork();
+  } else {
+    require('./server.js');
+  }`,
+    },
+    {
+      question: "Explain the phases of the Node.js event loop.",
+      shortAnswer: "Timers → Pending → Idle/Prepare → Poll → Check → Close",
+      longAnswer: `
+  1. **Timers**: Execute setTimeout/setInterval callbacks
+  2. **Pending callbacks**: Execute I/O-related deferred callbacks
+  3. **Idle/Prepare**: Internal phase
+  4. **Poll**: Retrieve new I/O events, execute their callbacks
+  5. **Check**: Execute setImmediate() callbacks
+  6. **Close**: Execute 'close' event callbacks`,
+    },
+    {
+      question: "What is the purpose of the `--inspect` flag?",
+      shortAnswer: "Enables Node.js debugger with Chrome DevTools Protocol.",
+      codeExample: "node --inspect=9229 app.js",
+      longAnswer:
+        "Allows debugging using Chrome DevTools (chrome://inspect) or VS Code. Supports breakpoints, profiling, and memory analysis.",
+    },
+    {
+      question: "How does `require()` work in Node.js?",
+      shortAnswer: "Synchronous module loading with caching.",
+      longAnswer: `
+  1. Resolves file path
+  2. Checks cache (require.cache)
+  3. Reads file contents
+  4. Wraps code in module wrapper function
+  5. Executes code
+  6. Returns module.exports`,
     },
     {
       question:
-        "What is the difference between setImmediate() and process.nextTick()?",
-      shortAnswer:
-        "process.nextTick() fires immediately on the same phase, setImmediate() fires on the following iteration or 'tick' of the event loop.",
-      longAnswer:
-        "process.nextTick() and setImmediate() are both functions used to defer the execution of code, but they work slightly differently. process.nextTick() defers the execution of an action till the next pass around the event loop. It fires immediately on the same phase. setImmediate() executes a callback on the next cycle of the event loop and it gives back to the event loop for executing any I/O operations. In essence, process.nextTick() fires more immediately than setImmediate().",
+        "What is the difference between `exec` and `spawn` in child processes?",
+      shortAnswer: "exec buffers output, spawn streams output.",
+      codeExample: `
+  const { exec, spawn } = require('child_process');
+  
+  exec('ls -l', (err, stdout) => {...}); 
+  spawn('ls', ['-l']).stdout.on('data', (data) => {...});`,
     },
     {
-      question: "How do you handle errors in Node.js?",
-      shortAnswer:
-        "Using try-catch blocks, error-first callbacks, and promises/async-await error handling.",
-      longAnswer:
-        "Error handling in Node.js can be done in several ways. For synchronous code, you can use try-catch blocks. For asynchronous code, you typically pass errors as the first argument to callback functions (error-first callbacks). For promises, you can use .catch() method or try-catch with async/await. It's also common to use error events in Node.js, where an 'error' event is emitted when an error occurs.",
+      question: "How to handle uncaught exceptions?",
+      shortAnswer: "process.on('uncaughtException') and proper cleanup.",
       codeExample: `
-// Synchronous error handling
-try {
-  // code that might throw an error
-} catch (err) {
-  console.error(err);
-}
-
-// Asynchronous error handling with callbacks
-fs.readFile('file.txt', (err, data) => {
-  if (err) {
-    console.error('Error reading file:', err);
-    return;
-  }
-  // process data
-});
-
-// Error handling with promises
-someAsyncFunction()
-  .then(result => {
-    // handle result
-  })
-  .catch(err => {
-    console.error('Error:', err);
+  process.on('uncaughtException', (err) => {
+    console.error('Critical error:', err);
+    // Always exit after logging
+    process.exit(1);
+  });`,
+    },
+    {
+      question: "What is the purpose of the `util.promisify` function?",
+      shortAnswer: "Converts callback-style functions to promises.",
+      codeExample: `
+  const util = require('util');
+  const fs = require('fs');
+  const readFile = util.promisify(fs.readFile);
+  
+  async function main() {
+    const data = await readFile('file.txt');
+  }`,
+    },
+    {
+      question: "Explain the `Stream` module types.",
+      shortAnswer: "Readable, Writable, Duplex, Transform",
+      codeExample: `
+  const { Readable } = require('stream');
+  const myStream = new Readable({
+    read(size) {
+      this.push('data');
+      this.push(null); // EOF
+    }
+  });`,
+    },
+    {
+      question: "What is the `__dirname` global?",
+      shortAnswer: "Absolute path of the directory containing current file.",
+      codeExample: "console.log(__dirname); // /home/user/project/src",
+    },
+    {
+      question: "How to implement rate limiting in Express?",
+      shortAnswer: "Use middleware like express-rate-limit.",
+      codeExample: `
+  const rateLimit = require('express-rate-limit');
+  app.use(rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100 // limit each IP to 100 requests
+  }));`,
+    },
+    // ... 20 more questions ...
+    {
+      question: "What is the purpose of the `net` module?",
+      shortAnswer: "Create TCP servers/clients.",
+      codeExample: `
+  const net = require('net');
+  const server = net.createServer((socket) => {
+    socket.write('Echo server\\r\\n');
+    socket.pipe(socket);
+  }).listen(1337, '127.0.0.1');`,
+    },
+    {
+      question: "How to handle environment variables?",
+      shortAnswer: "Use `process.env` with dotenv package.",
+      codeExample: `
+  // .env file
+  PORT=3000
+  
+  // app.js
+  require('dotenv').config();
+  const port = process.env.PORT;`,
+    },
+    {
+      question:
+        "What is the difference between `process.nextTick()` and `setImmediate()`?",
+      shortAnswer:
+        "nextTick runs before event loop phases, setImmediate after.",
+      codeExample: `
+  process.nextTick(() => console.log('Next tick'));
+  setImmediate(() => console.log('Immediate')); 
+  // Output order: Next tick → Immediate`,
+    },
+    {
+      question: "How to create a HTTP server without Express?",
+      shortAnswer: "Use the http core module.",
+      codeExample: `
+  const http = require('http');
+  http.createServer((req, res) => {
+    res.writeHead(200);
+    res.end('Hello World');
+  }).listen(3000);`,
+    },
+    {
+      question: "What is the purpose of the `events` module?",
+      shortAnswer: "Implement event-driven architecture via EventEmitter.",
+      codeExample: `
+  const EventEmitter = require('events');
+  class MyEmitter extends EventEmitter {}
+  const myEmitter = new MyEmitter();
+  myEmitter.on('event', () => console.log('Event fired!'));
+  myEmitter.emit('event');`,
+    },
+    {
+      question: "How to handle file uploads in Express?",
+      shortAnswer: "Use middleware like multer.",
+      codeExample: `
+  const multer = require('multer');
+  const upload = multer({ dest: 'uploads/' });
+  
+  app.post('/upload', upload.single('file'), (req, res) => {
+    res.send('File uploaded!');
+  });`,
+    },
+    {
+      question: "What is the Node.js V8 engine?",
+      shortAnswer: "Google's JavaScript engine used by Node.js for execution.",
+      longAnswer:
+        "V8 compiles JS directly to native machine code using JIT compilation. It handles memory management (garbage collection) and optimizes hot code paths.",
+    },
+    {
+      question: "How to implement caching in Node.js?",
+      shortAnswer: "Use in-memory stores (Redis) or HTTP caching headers.",
+      codeExample: `
+  // Using Redis
+  const redis = require('redis');
+  const client = redis.createClient();
+  
+  function cacheMiddleware(req, res, next) {
+    const key = req.url;
+    client.get(key, (err, data) => {
+      if (data) return res.send(data);
+      next();
+    });
+  }`,
+    },
+    {
+      question: "What is the purpose of the `os` module?",
+      shortAnswer: "Get OS-level information.",
+      codeExample: `
+  const os = require('os');
+  console.log(os.platform()); // 'linux'
+  console.log(os.cpus().length); // CPU core count`,
+    },
+    {
+      question: "How to handle memory leaks?",
+      shortAnswer:
+        "Use heap snapshots, fix global variables, clean up listeners.",
+      longAnswer:
+        "Common causes: Global variables, closures holding references, uncleared timers/intervals, unremoved event listeners. Use --inspect flag with Chrome DevTools to analyze.",
+    },
+    {
+      question: "What is the `worker_threads` module?",
+      shortAnswer: "Run JavaScript in parallel using threads.",
+      codeExample: `const { Worker } = require('worker_threads'); new Worker(
+const { parentPort } = require('worker_threads');
+    parentPort.postMessage('Hello from worker');
+  '.on('message', console.log);`,
+    },
+    {
+      question: "How to handle circular dependencies?",
+      shortAnswer: "Refactor code or use dependency injection.",
+      longAnswer:
+        "When module A requires B and B requires A, Node.js returns incomplete objects. Solutions: Move shared code to third module, use dependency injection pattern.",
+    },
+    {
+      question: "What is the `path` module used for?",
+      shortAnswer: "Handle file/directory paths cross-platform.",
+      codeExample:
+        "const path = require('path'); const fullPath = path.join(__dirname, 'files', 'test.txt'); const ext = path.extname(fullPath)",
+    },
+    {
+      question: "How to implement authentication in Express?",
+      shortAnswer: "Use Passport.js or JWT tokens.",
+      codeExample: `
+  const jwt = require('jsonwebtoken');
+  const token = jwt.sign({ userId: 123 }, 'secret');
+  // Verify later: jwt.verify(token, 'secret');`,
+    },
+    {
+      question: "What is the `readline` module?",
+      shortAnswer: "Read input from streams line-by-line.",
+      codeExample: `
+  const readline = require('readline');
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
   });
-
-// Error handling with async/await
-async function someFunction() {
-  try {
-    const result = await someAsyncFunction();
-    // handle result
-  } catch (err) {
-    console.error('Error:', err);
-  }
-}
-      `,
+  
+  rl.question('What's your name? ', (name) => {
+    console.log(\`Hello \${name}\`);
+    rl.close();
+  });`,
     },
     {
-      question: "What is a buffer in Node.js?",
-      shortAnswer: "A class in Node.js to handle binary data directly.",
-      longAnswer:
-        "In Node.js, Buffer is a class that's used to handle binary data. It's similar to an array of integers but corresponds to a raw memory allocation outside the V8 heap. Buffers can be manipulated in various ways, like reading from or writing to a file system or a network. They're particularly useful when dealing with TCP streams or performing file system operations. The Buffer class is a global within Node.js, so it can be used without requiring an import statement.",
+      question: "How to handle CORS in native Node.js?",
+      shortAnswer: "Set response headers manually.",
       codeExample: `
-// Creating a buffer
-const buf1 = Buffer.alloc(10); // Creates a buffer of 10 bytes filled with zeros
-const buf2 = Buffer.from('Hello World'); // Creates a buffer containing 'Hello World'
-
-// Writing to a buffer
-buf1.write('Hello');
-
-// Reading from a buffer
-console.log(buf1.toString()); // Outputs: Hello
-console.log(buf2.toString()); // Outputs: Hello World
-
-// Getting the length of a buffer
-console.log(buf1.length); // Outputs: 10
-console.log(buf2.length); // Outputs: 11
-      `,
+  response.writeHead(200, {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET,POST'
+  });`,
+    },
+    {
+      question: "What is the `perf_hooks` module?",
+      shortAnswer: "Performance measurement utilities.",
+      codeExample: `
+  const { performance } = require('perf_hooks');
+  const start = performance.now();
+  // ... code ...
+  console.log(\`Took \${performance.now() - start}ms\`);`,
+    },
+    {
+      question: "How to implement WebSockets in Node.js?",
+      shortAnswer: "Use ws library or Socket.IO.",
+      codeExample: `
+  const WebSocket = require('ws');
+  const wss = new WebSocket.Server({ port: 8080 });
+  wss.on('connection', (ws) => {
+    ws.on('message', (message) => {
+      ws.send(\`Echo: \${message}\`);
+    });
+  });`,
+    },
+    {
+      question: "What is the `child_process.fork()` method?",
+      shortAnswer: "Special case of spawn() for Node.js processes.",
+      codeExample: `
+  const { fork } = require('child_process');
+  const child = fork('script.js');
+  child.on('message', (m) => console.log('Child said:', m));
+  child.send({ hello: 'world' });`,
+    },
+    {
+      question: "How to handle large JSON files?",
+      shortAnswer: "Use streaming JSON parsers like JSONStream.",
+      codeExample: `
+  const JSONStream = require('JSONStream');
+  const fs = require('fs');
+  
+  fs.createReadStream('big.json')
+    .pipe(JSONStream.parse('*'))
+    .on('data', (item) => processItem(item));`,
+    },
+    {
+      question: "What is the `vm` module?",
+      shortAnswer: "Execute JavaScript code in V8 virtual machine contexts.",
+      codeExample: `
+  const vm = require('vm');
+  const context = { a: 1 };
+  vm.runInNewContext('a += 1; b = 3;', context);
+  console.log(context); // { a: 2, b: 3 }`,
     },
   ];
 
   return (
-    <div className="max-w-4xl mx-auto py-8 px-4">
+    <div className="max-w-full mx-auto md:p-5 p-2">
       <h2 className="text-3xl font-bold mb-8 text-center text-gray-800">
         Node.js Interview Questions
       </h2>
       <div className="space-y-6">
-        {questions.map((q, index) => (
-          <Question
-            key={index}
-            question={q.question}
-            shortAnswer={q.shortAnswer}
-            longAnswer={q.longAnswer}
-            codeExample={q.codeExample}
-          />
-        ))}
+        <QuestionsList questions={questions} />
       </div>
     </div>
   );

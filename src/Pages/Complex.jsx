@@ -92,7 +92,7 @@ console.log('Reading file...');`,
     },
   ];
   return (
-    <div className="min-h-screen bg-white/10 backdrop-blur-2xl text-black p-8">
+    <div className="max-w-full mx-auto md:p-5 p-2">
       <h1 className="text-4xl font-bold text-center mb-12">
         Complex MERN Stack Interview Questions
       </h1>
