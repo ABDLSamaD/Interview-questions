@@ -1,0 +1,101 @@
+{
+    "mongodb": [
+      {
+        "question": "What is MongoDB?",
+        "shortAnswer": "A document-oriented NoSQL database.",
+        "longAnswer": "MongoDB is a document-oriented NoSQL database that provides high performance, high availability, and easy scalability. It works on the concept of collections and documents instead of tables and rows as in relational databases. MongoDB stores data in flexible, JSON-like documents, meaning fields can vary from document to document and data structure can be changed over time.",
+        "codeExample": "// Example MongoDB document\n{\n  _id: ObjectId(\"5099803df3f4948bd2f98391\"),\n  name: { first: \"Alan\", last: \"Turing\" },\n  birth: new Date('Jun 23, 1912'),\n  death: new Date('Jun 07, 1954'),\n  contribs: [ \"Turing machine\", \"Turing test\", \"Turingery\" ],\n  views : NumberLong(1250000)\n}"
+      },
+      {
+        "question": "What are the key features of MongoDB?",
+        "shortAnswer": "Document-oriented, high performance, high availability, easy scalability, rich queries.",
+        "longAnswer": "MongoDB's key features include its document-oriented structure, which allows for flexible and dynamic schemas. It offers high performance for both reads and writes, automatic sharding for horizontal scalability, and built-in replication for high availability. MongoDB also supports rich queries, indexing, and aggregation framework for powerful data analysis."
+      },
+      {
+        "question": "Explain the concept of sharding in MongoDB.",
+        "shortAnswer": "Distributing data across multiple machines for horizontal scaling.",
+        "longAnswer": "Sharding in MongoDB is a method for distributing data across multiple machines to support deployments with very large data sets and high throughput operations. It's MongoDB's approach to scaling horizontally. MongoDB uses sharding to support deployments with very large data sets or high throughput applications that exceed the capacity of a single server.",
+        "codeExample": "// Enable sharding for a database\nsh.enableSharding(\"myDatabase\")\n\n// Shard a collection based on a key\nsh.shardCollection(\"myDatabase.myCollection\", { \"shardKey\": 1 })"
+      },
+      {
+        "question": "What is the aggregation framework in MongoDB?",
+        "shortAnswer": "A way to process data and return computed results.",
+        "longAnswer": "The aggregation framework is a set of analytical tools within MongoDB that allow you to do analytics on documents in one or more collections. It's based on the concept of a pipeline, where you can pass the documents of a collection through a pipeline of one or more stages, each of which performs a different operation on the documents. Common operations include filtering, grouping, sorting, and computing values.",
+        "codeExample": "db.orders.aggregate([\n   { $match: { status: \"A\" } },\n   { $group: { _id: \"$cust_id\", total: { $sum: \"$amount\" } } },\n   { $sort: { total: -1 } }\n])"
+      }
+    ],
+    "express": [
+      {
+        "question": "What is Express.js?",
+        "shortAnswer": "A minimal and flexible Node.js web application framework.",
+        "longAnswer": "Express.js is a minimal and flexible Node.js web application framework that provides a robust set of features for web and mobile applications. It facilitates the rapid development of Node based Web applications. Express.js is known for its performance, unopinionated nature, and its minimalist structure that allows developers to add only what they need."
+      },
+      {
+        "question": "What are middleware in Express.js?",
+        "shortAnswer": "Functions that have access to the request-response cycle.",
+        "longAnswer": "Middleware functions are functions that have access to the request object (req), the response object (res), and the next middleware function in the application's request-response cycle, commonly denoted by a variable named next. Middleware can execute any code, make changes to the request and response objects, end the request-response cycle, and call the next middleware in the stack.",
+        "codeExample": "const express = require('express');\nconst app = express();\n\napp.use((req, res, next) => {\n  console.log('Time:', Date.now());\n  next();\n});"
+      },
+      {
+        "question": "How do you handle errors in Express.js?",
+        "shortAnswer": "Using error-handling middleware functions.",
+        "longAnswer": "Express comes with a built-in error handler that takes care of any errors that might be encountered in the app. This default error-handling middleware function is added at the end of the middleware function stack. If you pass an error to next() and you don't handle it in a custom error handler, it will be handled by the built-in error handler; the error will be written to the client with the stack trace.",
+        "codeExample": "app.use((err, req, res, next) => {\n  console.error(err.stack);\n  res.status(500).send('Something broke!');\n});"
+      },
+      {
+        "question": "What is routing in Express.js?",
+        "shortAnswer": "Defining application endpoints and how they respond to client requests.",
+        "longAnswer": "Routing refers to determining how an application responds to a client request to a particular endpoint, which is a URI (or path) and a specific HTTP request method (GET, POST, etc.). Each route can have one or more handler functions, which are executed when the route is matched. Route definition takes the following structure: app.METHOD(PATH, HANDLER), where app is an instance of express, METHOD is an HTTP request method, PATH is a path on the server, and HANDLER is the function executed when the route is matched.",
+        "codeExample": "app.get('/', function(req, res) {\n  res.send('Hello World!');\n});\n\napp.post('/user', function(req, res) {\n  res.send('Got a POST request at /user');\n});"
+      }
+    ],
+    "react": [
+      {
+        "question": "What is React?",
+        "shortAnswer": "A JavaScript library for building user interfaces.",
+        "longAnswer": "React is a declarative, efficient, and flexible JavaScript library for building user interfaces. It lets you compose complex UIs from small and isolated pieces of code called 'components'. React is maintained by Facebook and a community of individual developers and companies. React can be used as a base in the development of single-page or mobile applications."
+      },
+      {
+        "question": "What are the key features of React?",
+        "shortAnswer": "Virtual DOM, JSX, component-based architecture, unidirectional data flow.",
+        "longAnswer": "Key features of React include: Virtual DOM for better performance, JSX for writing HTML structures in JavaScript, component-based architecture for reusable UI pieces, unidirectional data flow for better control over the application state, and the ability to be used for both client and server-side rendering. React also has a rich ecosystem and can be used to build mobile applications (React Native)."
+      },
+      {
+        "question": "What are hooks in React?",
+        "shortAnswer": "Functions that let you use state and other React features in functional components.",
+        "longAnswer": "Hooks are functions that let you 'hook into' React state and lifecycle features from function components. Hooks don't work inside classes — they let you use React without classes. React provides a few built-in Hooks like useState, useEffect, useContext, useReducer, etc. They solve a wide variety of problems that developers encounter when building React applications, such as extracting reusable logic from components, managing side effects, and more.",
+        "codeExample": "import React, { useState, useEffect } from 'react';\n\nfunction Example() {\n  const [count, setCount] = useState(0);\n\n  useEffect(() => {\n    document.title = `You clicked ${count} times`;\n  });\n\n  return (\n    <div>\n      <p>You clicked {count} times</p>\n      <button onClick={() => setCount(count + 1)}>\n        Click me\n      </button>\n    </div>\n  );\n}"
+      },
+      {
+        "question": "What is JSX?",
+        "shortAnswer": "A syntax extension for JavaScript that looks similar to XML or HTML.",
+        "longAnswer": "JSX is a syntax extension for JavaScript that looks similar to XML or HTML. It's used with React to describe what the UI should look like. JSX may remind you of a template language, but it comes with the full power of JavaScript. JSX produces React 'elements'. You can embed any JavaScript expression in JSX by wrapping it in curly braces. After compilation, JSX expressions become regular JavaScript function calls and evaluate to JavaScript objects.",
+        "codeExample": "const element = <h1>Hello, {name}</h1>;\nconst element = React.createElement(\n  'h1',\n  null,\n  `Hello, ${name}`\n);"
+      }
+    ],
+    "nodejs": [
+      {
+        "question": "What is Node.js?",
+        "shortAnswer": "A JavaScript runtime built on Chrome's V8 JavaScript engine.",
+        "longAnswer": "Node.js is an open-source, cross-platform JavaScript runtime environment that executes JavaScript code outside of a browser. It allows developers to use JavaScript to write command line tools and for server-side scripting. Node.js uses an event-driven, non-blocking I/O model that makes it lightweight and efficient, perfect for data-intensive real-time applications that run across distributed devices."
+      },
+      {
+        "question": "What is the event loop in Node.js?",
+        "shortAnswer": "A mechanism that allows Node.js to perform non-blocking I/O operations.",
+        "longAnswer": "The event loop is what allows Node.js to perform non-blocking I/O operations despite the fact that JavaScript is single-threaded. It works by offloading operations to the system kernel whenever possible. The event loop is responsible for executing the code, collecting and processing events, and executing queued sub-tasks. Most modern kernels are multi-threaded, so they can handle multiple operations executing in the background. When one of these operations completes, the kernel tells Node.js so that the appropriate callback may be added to the poll queue to eventually be executed."
+      },
+      {
+        "question": "What is the purpose of module.exports in Node.js?",
+        "shortAnswer": "To expose functions, objects, or values from a module to be used in other files.",
+        "longAnswer": "module.exports is the object that's actually returned as the result of a require call. The exports variable is initially set to that same object (i.e. it's a shorthand), so in the module code you can add properties to exports or you can completely replace exports with a new object or function. This allows you to create modular code in Node.js, where you can separate your code into different files and expose only what you want to be accessible from outside the module.",
+        "codeExample": "// myModule.js\nmodule.exports = {\n  foo: function() {\n    console.log('Hello from foo');\n  },\n  bar: 'A bar string'\n};\n\n// main.js\nconst myModule = require('./myModule');\nmyModule.foo(); // Outputs: Hello from foo\nconsole.log(myModule.bar); // Outputs: A bar string"
+      },
+      {
+        "question": "What is a buffer in Node.js?",
+        "shortAnswer": "A class in Node.js to handle binary data directly.",
+        "longAnswer": "In Node.js, Buffer is a class that's used to handle binary data. It's similar to an array of integers but corresponds to a raw memory allocation outside the V8 heap. Buffers can be manipulated in various ways, like reading from or writing to a file system or a network. They're particularly useful when dealing with TCP streams or performing file system operations. The Buffer class is a global within Node.js, so it can be used without requiring an import statement.",
+        "codeExample": "// Creating a buffer\nconst buf1 = Buffer.alloc(10); // Creates a buffer of 10 bytes filled with zeros\nconst buf2 = Buffer.from('Hello World'); // Creates a buffer containing 'Hello World'\n\n// Writing to a buffer\nbuf1.write('Hello');\n\n// Reading from a buffer\nconsole.log(buf1.toString()); // Outputs: Hello\nconsole.log(buf2.toString()); // Outputs: Hello World\n\n// Getting the length of a buffer\nconsole.log(buf1.length); // Outputs: 10\nconsole.log(buf2.length); // Outputs: 11"
+      }
+    ]
+  }
+  

@@ -10,11 +10,11 @@ import Complex from "./Pages/Complex";
 function App() {
   return (
     <Router>
-      <div className="min-h-screen bg-white">
+      <div className="min-h-screen">
         <Navbar />
         <main className="container mx-auto p-2">
           <Routes>
-            <Route path="/" exact element={<Home />} />
+            <Route path="/" element={<Home />} />
             <Route path="/mongodb" element={<MongoDB />} />
             <Route path="/express" element={<Express />} />
             <Route path="/react" element={<React />} />

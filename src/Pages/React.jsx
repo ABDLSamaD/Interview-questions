@@ -1,3 +1,5 @@
+"use client";
+
 import Question from "../Components/Question";
 
 const React = () => {
@@ -74,7 +76,7 @@ const element = React.createElement(
   ];
 
   return (
-    <div className="max-w-7xl mx-auto py-8 px-4">
+    <div className="max-w-4xl mx-auto py-8 px-4">
       <h2 className="text-3xl font-bold mb-8 text-center text-gray-800">
         React Interview Questions
       </h2>

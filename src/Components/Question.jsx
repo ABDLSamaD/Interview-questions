@@ -1,53 +1,67 @@
-import React, { useState, useMemo } from "react";
-import { ChevronDown, ChevronUp } from "lucide-react";
+"use client";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
+import { BookOpen, Code, MessageSquare } from "lucide-react";
 
 const Question = ({ question, shortAnswer, longAnswer, codeExample }) => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const memoizedCodeExample = useMemo(() => {
-    if (!codeExample) return null;
-    return (
-      <div className="rounded-md overflow-hidden mt-4">
-        <SyntaxHighlighter
-          language="javascript"
-          style={atomDark}
-          customStyle={{
-            padding: "1rem",
-            fontSize: "0.875rem",
-            lineHeight: "1.5",
-            borderRadius: "0.375rem",
-          }}
-        >
-          {codeExample}
-        </SyntaxHighlighter>
-      </div>
-    );
-  }, [codeExample]);
-
   return (
-    <div className="bg-white/80 backdrop-blur-md rounded-lg shadow-md overflow-hidden mb-6 border border-gray-200 transition-all duration-300 hover:shadow-lg">
-      <div
-        className="flex justify-between items-center p-4 cursor-pointer hover:bg-gray-50 transition-colors duration-200"
-        onClick={() => setIsOpen(!isOpen)}
-      >
-        <h3 className="text-lg font-semibold text-gray-800">{question}</h3>
-        {isOpen ? (
-          <ChevronUp className="w-5 h-5 text-gray-500" />
-        ) : (
-          <ChevronDown className="w-5 h-5 text-gray-500" />
+    <div className="bg-gray-600/10 backdrop-blur-md rounded-2xl shadow-lg overflow-hidden mb-8 border border-solid border-gray-200 hover:shadow-xl transition-all duration-300 ease-in-out">
+      <div className="p-8">
+        {/* Question */}
+        <h3 className="text-2xl font-bold text-gray-800 mb-6">{question}</h3>
+
+        {/* Short Answer */}
+        <div className="mb-6">
+          <div className="flex items-center mb-3">
+            <MessageSquare className="w-5 h-5 text-emerald-600 mr-2" />
+            <p className="text-sm font-semibold text-emerald-600 uppercase tracking-wider">
+              Short Answer
+            </p>
+          </div>
+          <p className="text-gray-700 text-base leading-relaxed pl-7">
+            {shortAnswer}
+          </p>
+        </div>
+
+        {/* Long Answer */}
+        <div className="mb-6">
+          <div className="flex items-center mb-3">
+            <BookOpen className="w-5 h-5 text-blue-600 mr-2" />
+            <p className="text-sm font-semibold text-blue-600 uppercase tracking-wider">
+              Detailed Explanation
+            </p>
+          </div>
+          <p className="text-gray-700 text-base leading-relaxed pl-7">
+            {longAnswer}
+          </p>
+        </div>
+
+        {/* Code Example */}
+        {codeExample && (
+          <div className="mb-4">
+            <div className="flex items-center mb-3">
+              <Code className="w-5 h-5 text-purple-600 mr-2" />
+              <p className="text-sm font-semibold text-purple-600 uppercase tracking-wider">
+                Code Example
+              </p>
+            </div>
+            <div className="rounded-xl overflow-hidden shadow-lg">
+              <SyntaxHighlighter
+                language="javascript"
+                style={atomDark}
+                customStyle={{
+                  padding: "1.5rem",
+                  fontSize: "0.9rem",
+                  lineHeight: "1.6",
+                  borderRadius: "0.75rem",
+                }}
+              >
+                {codeExample}
+              </SyntaxHighlighter>
+            </div>
+          </div>
         )}
       </div>
-      {isOpen && (
-        <div className="p-4 bg-gray-50 border-t border-gray-200">
-          <p className="text-gray-700 mb-4 font-medium">
-            Short Answer: {shortAnswer}
-          </p>
-          <p className="text-gray-700 mb-4">Long Answer: {longAnswer}</p>
-          {memoizedCodeExample}
-        </div>
-      )}
     </div>
   );
 };
