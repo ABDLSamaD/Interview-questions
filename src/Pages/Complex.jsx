@@ -1,5 +1,5 @@
 import React from "react";
-import Question from "../Components/Question";
+import QuestionsList from "../Components/Question";
 
 const Complex = () => {
   const questions = [
@@ -96,15 +96,9 @@ console.log('Reading file...');`,
       <h1 className="text-4xl font-bold text-center mb-12">
         Complex MERN Stack Interview Questions
       </h1>
-      {questions.map((q, index) => (
-        <Question
-          key={index}
-          question={q.question}
-          longAnswer={q.longAnswer}
-          shortAnswer={q.shortAnswer}
-          codeExample={q.codeExample}
-        />
-      ))}
+      <div className="space-y-6">
+        <QuestionsList questions={questions} />
+      </div>
     </div>
   );
 };

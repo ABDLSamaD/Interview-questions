@@ -10,6 +10,13 @@ const React = () => {
         "React is a JavaScript library for building user interfaces.",
       longAnswer:
         "React is a declarative, efficient, and flexible JavaScript library for building user interfaces. It allows developers to create reusable UI components that can manage their state and render efficiently. React is maintained by Facebook and is commonly used for building single-page applications (SPAs).",
+      codeExample: `
+        import React from 'react';
+        function App() {
+          return <h1>Hello, world!</h1>;
+        }
+        export default App;
+      `,
     },
     {
       question: "What is JSX?",
@@ -23,183 +30,470 @@ const React = () => {
       `,
     },
     {
-      question: "What is the virtual DOM in React?",
+      question: "What is a React Hook?",
       shortAnswer:
-        "The virtual DOM is a lightweight in-memory representation of the real DOM.",
+        "Hooks are functions that let functional components use state and lifecycle features.",
       longAnswer:
-        "React creates a virtual DOM to optimize the process of updating the actual DOM. When state or props change, React first updates the virtual DOM, compares it with the previous state, and then makes the minimal number of changes to the actual DOM to improve performance.",
-    },
-    {
-      question: "What are components in React?",
-      shortAnswer:
-        "Components are reusable building blocks in a React application.",
-      longAnswer:
-        "Components are the core building blocks of a React application. They can be functional or class-based and encapsulate logic, UI, and state. Components can be nested, reused, and composed to create complex UIs.",
+        "Hooks were introduced in React 16.8 to allow functional components to use state and other React features without writing a class. The most common hooks include useState, useEffect, and useContext.",
       codeExample: `
-        function Welcome(props) {
-          return <h1>Hello, {props.name}</h1>;
+        import React, { useState } from 'react';
+        function Counter() {
+          const [count, setCount] = useState(0);
+          return <button onClick={() => setCount(count + 1)}>Count: {count}</button>;
         }
-  
+      `,
+    },
+    {
+      question: "What is the difference between useState and useReducer?",
+      shortAnswer:
+        "useState is simpler, while useReducer is better for complex state logic.",
+      longAnswer:
+        "useState is used to handle simple state logic, whereas useReducer is preferred when dealing with complex state transitions that involve multiple actions and dependencies.",
+      codeExample: `
+        import React, { useReducer } from 'react';
+        const reducer = (state, action) => {
+          switch (action.type) {
+            case 'increment':
+              return { count: state.count + 1 };
+            case 'decrement':
+              return { count: state.count - 1 };
+            default:
+              return state;
+          }
+        };
+        function Counter() {
+          const [state, dispatch] = useReducer(reducer, { count: 0 });
+          return (
+            <div>
+              <button onClick={() => dispatch({ type: 'decrement' })}>-</button>
+              <span>{state.count}</span>
+              <button onClick={() => dispatch({ type: 'increment' })}>+</button>
+            </div>
+          );
+        }
+      `,
+    },
+    {
+      question: "What is React Suspense?",
+      shortAnswer: "Suspense lets components wait for data before rendering.",
+      longAnswer:
+        "React Suspense is a feature that allows components to delay rendering until some asynchronous operation, such as data fetching, is complete. This improves user experience by preventing unnecessary UI flickering.",
+      codeExample: `
+        import React, { Suspense, lazy } from 'react';
+        const LazyComponent = lazy(() => import('./LazyComponent'));
         function App() {
-          return <Welcome name="Sara" />;
-        }`,
+          return (
+            <Suspense fallback={<div>Loading...</div>}>
+              <LazyComponent />
+            </Suspense>
+          );
+        }
+      `,
     },
     {
-      question:
-        "What is the difference between functional and class components?",
+      question: "What is React Server Components?",
       shortAnswer:
-        "Functional components are stateless and simpler, while class components can manage state and lifecycle methods.",
+        "React Server Components allow rendering components on the server for better performance.",
       longAnswer:
-        "Functional components are simpler and typically used for presenting UI. They were initially stateless but can now use hooks to manage state and side effects. Class components have more features, such as state management and lifecycle methods like componentDidMount(), but functional components are now the preferred way to write components in React due to hooks.",
+        "React Server Components (RSC) allow components to be rendered on the server, reducing the amount of JavaScript sent to the client. This results in faster load times and improved performance.",
     },
     {
-      question: "What are props in React?",
+      question: "What is the difference between SSR and CSR?",
       shortAnswer:
-        "Props (short for properties) are inputs passed into components.",
+        "SSR renders pages on the server, while CSR renders pages in the browser.",
       longAnswer:
-        "Props are used to pass data from parent components to child components. They are read-only and allow for the creation of dynamic, reusable components that can be configured with different data.",
+        "Server-side rendering (SSR) generates the page on the server before sending it to the client, improving SEO and initial load performance. Client-side rendering (CSR) loads minimal HTML and renders the content dynamically using JavaScript.",
+      codeExample: `
+        // Next.js SSR example
+        export async function getServerSideProps() {
+          const data = await fetchData();
+          return { props: { data } };
+        }
+        function Page({ data }) {
+          return <div>{data}</div>;
+        }
+        export default Page;
+      `,
     },
     {
-      question: "What is state in React?",
+      question: "What is hydration in React?",
       shortAnswer:
-        "State is a way to store data in a component that can change over time.",
+        "Hydration is the process of attaching event handlers to server-rendered HTML.",
       longAnswer:
-        "State is used to manage data that can change within a component. Unlike props, which are passed down from parent components, state is specific to the component and can be updated by user interactions or other events.",
+        "When using server-side rendering, React first sends static HTML to the client. Once the JavaScript loads, React 'hydrates' the page by attaching event listeners and making it interactive.",
+      codeExample: `
+        ReactDOM.hydrate(<App />, document.getElementById('root'));
+      `,
     },
     {
-      question: "What are React Hooks?",
+      question: "What is the Virtual DOM?",
       shortAnswer:
-        "Hooks are functions that allow functional components to have state and side effects.",
+        "The Virtual DOM is a lightweight copy of the real DOM used for efficient updates.",
       longAnswer:
-        "React hooks were introduced in React 16.8 to allow functional components to have features like state and lifecycle methods. Common hooks include useState(), useEffect(), and useContext(), which allow components to manage local state, perform side effects, and share data.",
+        "The Virtual DOM is a lightweight representation of the real DOM. React uses it to optimize rendering by comparing the Virtual DOM with the real DOM and applying only the necessary updates.",
     },
     {
-      question: "What is useState() in React?",
+      question: "What are React Fragments?",
       shortAnswer:
-        "useState() is a hook that allows you to add state to a functional component.",
+        "Fragments allow grouping multiple elements without adding extra nodes to the DOM.",
       longAnswer:
-        "useState() is a React hook that lets you add state to functional components. It takes an initial state value as an argument and returns an array with the current state and a function to update it.",
+        "React Fragments let you group a list of children without adding an extra DOM node. This is useful when you need to return multiple elements from a component.",
+      codeExample: `
+        function App() {
+          return (
+            <>
+              <h1>Hello</h1>
+              <h2>World</h2>
+            </>
+          );
+        }
+      `,
     },
     {
-      question: "What is useEffect() in React?",
+      question: "What is the Context API?",
       shortAnswer:
-        "useEffect() is a hook that handles side effects in a functional component.",
+        "The Context API provides a way to pass data through the component tree without props.",
       longAnswer:
-        "useEffect() allows you to perform side effects in your components, such as data fetching, DOM manipulation, or setting up subscriptions. It runs after the render and can be configured to run only when specific dependencies change.",
+        "The Context API allows you to share data (like themes or authentication) across the component tree without passing props manually at every level. It consists of a Provider and a Consumer.",
+      codeExample: `
+        const ThemeContext = React.createContext('light');
+        function App() {
+          return (
+            <ThemeContext.Provider value="dark">
+              <Toolbar />
+            </ThemeContext.Provider>
+          );
+        }
+      `,
     },
     {
-      question: "What is the Context API in React?",
+      question: "What is React.memo?",
       shortAnswer:
-        "The Context API is a way to pass data through the component tree without prop drilling.",
+        "React.memo is a higher-order component for optimizing functional components.",
       longAnswer:
-        "The Context API allows you to share values like themes, authentication states, or user preferences globally across components without passing props down through every level of the component tree. It consists of React.createContext(), Context.Provider, and Context.Consumer.",
-    },
-    {
-      question: "What is React Router?",
-      shortAnswer:
-        "React Router is a library that enables navigation and routing in a React application.",
-      longAnswer:
-        "React Router allows you to navigate between different views or pages in a single-page application (SPA) without reloading the page. It maps URLs to components, enabling the creation of dynamic, client-side routes.",
-    },
-    {
-      question: "What is Redux?",
-      shortAnswer:
-        "Redux is a state management library for JavaScript applications.",
-      longAnswer:
-        "Redux is a predictable state container that helps manage the state of an application in a centralized store. It allows actions to update the state and provides middleware for handling asynchronous logic, making it easier to track state changes across the app.",
+        "React.memo is used to memoize functional components, preventing unnecessary re-renders when the props haven't changed. It is similar to PureComponent for class components.",
+      codeExample: `
+        const MyComponent = React.memo(function MyComponent(props) {
+          return <div>{props.value}</div>;
+        });
+      `,
     },
     {
       question:
         "What is the difference between controlled and uncontrolled components?",
       shortAnswer:
-        "Controlled components have their state managed by React, while uncontrolled components handle their own state internally.",
+        "Controlled components manage state via React, while uncontrolled components use the DOM.",
       longAnswer:
-        "In a controlled component, React manages the input state through state and event handlers. In an uncontrolled component, the DOM handles the input's state, and React doesn't manage it. Controlled components are preferred in React for better consistency and predictability.",
+        "Controlled components store their state in React and update it via setState. Uncontrolled components rely on the DOM to manage their state, often using refs.",
+      codeExample: `
+        // Controlled Component
+        function ControlledInput() {
+          const [value, setValue] = useState('');
+          return <input value={value} onChange={(e) => setValue(e.target.value)} />;
+        }
+  
+        // Uncontrolled Component
+        function UncontrolledInput() {
+          const inputRef = useRef();
+          return <input ref={inputRef} />;
+        }
+      `,
     },
     {
-      question: "What is the significance of keys in React?",
+      question: "What is React Router?",
       shortAnswer:
-        "Keys help React identify which items in a list are changed, added, or removed.",
+        "React Router is a library for routing in React applications.",
       longAnswer:
-        "Keys are unique identifiers used when rendering lists of elements. They help React efficiently update the UI by determining which elements need to be re-rendered when the state or props change. Keys should be stable and unique for each list item.",
+        "React Router allows you to define routes in a React application, enabling navigation between different components without reloading the page. It supports dynamic routing and nested routes.",
+      codeExample: `
+        import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+        function App() {
+          return (
+            <Router>
+              <Switch>
+                <Route path="/about" component={About} />
+                <Route path="/" component={Home} />
+              </Switch>
+            </Router>
+          );
+        }
+      `,
     },
     {
-      question: "What is the 'render' method in React?",
+      question: "What is Redux?",
       shortAnswer:
-        "The 'render' method is used to describe what should be rendered to the UI.",
+        "Redux is a state management library for React applications.",
       longAnswer:
-        "In class components, the render() method is responsible for returning the JSX that defines the component's UI. It is called whenever there is a change in state or props.",
+        "Redux is a predictable state container for JavaScript apps. It helps manage global state in a centralized store and makes state changes predictable through actions and reducers.",
+      codeExample: `
+        // Redux Store
+        const store = createStore(reducer);
+  
+        // Reducer
+        function reducer(state = {}, action) {
+          switch (action.type) {
+            case 'INCREMENT':
+              return { count: state.count + 1 };
+            default:
+              return state;
+          }
+        }
+      `,
     },
     {
-      question: "What is component lifecycle in React?",
+      question: "What is the difference between Redux and Context API?",
       shortAnswer:
-        "Component lifecycle refers to the different stages a component goes through from creation to destruction.",
+        "Redux is more feature-rich, while Context API is simpler and built into React.",
       longAnswer:
-        "In React, components go through several lifecycle phases: mounting, updating, and unmounting. Lifecycle methods (in class components) like componentDidMount(), componentDidUpdate(), and componentWillUnmount() allow you to perform actions at each phase.",
+        "Redux provides advanced features like middleware, time-travel debugging, and a centralized store. Context API is simpler and built into React, but it lacks some of Redux's advanced capabilities.",
     },
     {
-      question: "What is the purpose of shouldComponentUpdate()?",
+      question: "What is React Testing Library?",
       shortAnswer:
-        "shouldComponentUpdate() is used to optimize rendering by preventing unnecessary re-renders.",
+        "React Testing Library is a tool for testing React components.",
       longAnswer:
-        "shouldComponentUpdate() is a lifecycle method that determines if a component needs to re-render. By returning false, you can prevent React from re-rendering the component, which can improve performance, especially in large apps.",
+        "React Testing Library encourages testing components in a way that resembles how users interact with them. It focuses on testing behavior rather than implementation details.",
+      codeExample: `
+        import { render, screen } from '@testing-library/react';
+        import App from './App';
+  
+        test('renders learn react link', () => {
+          render(<App />);
+          const linkElement = screen.getByText(/learn react/i);
+          expect(linkElement).toBeInTheDocument();
+        });
+      `,
     },
     {
-      question: "What is React's reconciliation algorithm?",
+      question: "What is React Portals?",
       shortAnswer:
-        "React uses a reconciliation algorithm to efficiently update the DOM when state or props change.",
+        "Portals allow rendering children outside the parent DOM hierarchy.",
       longAnswer:
-        "React's reconciliation algorithm (also known as the diffing algorithm) compares the new virtual DOM with the previous one to determine the most efficient way to update the real DOM. It uses a minimal set of changes to keep the DOM in sync with the state of the application.",
+        "React Portals let you render a child component outside its parent DOM node. This is useful for modals, tooltips, and other UI elements that need to break out of their container.",
+      codeExample: `
+        function Modal({ children }) {
+          return ReactDOM.createPortal(
+            <div className="modal">{children}</div>,
+            document.getElementById('modal-root')
+          );
+        }
+      `,
     },
     {
-      question: "What are higher-order components (HOCs) in React?",
+      question: "What is React Error Boundaries?",
       shortAnswer:
-        "HOCs are functions that take a component and return a new component with added functionality.",
+        "Error Boundaries catch JavaScript errors in child components.",
       longAnswer:
-        "A higher-order component (HOC) is a pattern in React for reusing component logic. An HOC is a function that takes a component and returns a new component with additional props or behavior.",
+        "Error Boundaries are React components that catch JavaScript errors in their child component tree, log those errors, and display a fallback UI instead of crashing the app.",
+      codeExample: `
+        class ErrorBoundary extends React.Component {
+          state = { hasError: false };
+          static getDerivedStateFromError(error) {
+            return { hasError: true };
+          }
+          render() {
+            if (this.state.hasError) {
+              return <h1>Something went wrong.</h1>;
+            }
+            return this.props.children;
+          }
+        }
+      `,
     },
     {
-      question: "What is React.memo?",
+      question: "What is React Lazy Loading?",
       shortAnswer:
-        "React.memo is a higher-order component that memoizes the component to prevent unnecessary re-renders.",
+        "Lazy loading delays loading components until they are needed.",
       longAnswer:
-        "React.memo is used to optimize performance by memoizing a component. It prevents re-renders if the props of the component do not change, similar to React's PureComponent for class components.",
+        "React Lazy Loading allows you to load components only when they are required, reducing the initial bundle size and improving performance.",
+      codeExample: `
+        const LazyComponent = React.lazy(() => import('./LazyComponent'));
+        function App() {
+          return (
+            <Suspense fallback={<div>Loading...</div>}>
+              <LazyComponent />
+            </Suspense>
+          );
+        }
+      `,
     },
     {
-      question: "What are fragments in React?",
+      question: "What is React Concurrent Mode?",
       shortAnswer:
-        "Fragments are a way to group multiple elements without adding an extra node to the DOM.",
+        "Concurrent Mode enables rendering without blocking the main thread.",
       longAnswer:
-        "Fragments allow you to return multiple elements from a component without wrapping them in an extra DOM element, such as a div. This can reduce unnecessary DOM nodes and improve performance.",
+        "Concurrent Mode is an experimental feature in React that allows rendering to be interruptible, enabling smoother user experiences by avoiding blocking the main thread.",
     },
     {
-      question: "What are refs in React?",
+      question: "What is React Fiber?",
       shortAnswer:
-        "Refs are used to reference DOM elements or React components directly.",
+        "React Fiber is a reimplementation of React's core algorithm.",
       longAnswer:
-        "Refs provide a way to directly access DOM nodes or class component instances. They can be useful for interacting with the DOM, such as focusing an input element or triggering animations.",
+        "React Fiber is a complete rewrite of React's reconciliation algorithm. It enables features like Concurrent Mode and improves performance by breaking rendering work into smaller chunks.",
     },
     {
-      question: "What is useContext() in React?",
-      shortAnswer:
-        "useContext() is a hook that allows you to access the value of a context directly.",
+      question: "What is React PropTypes?",
+      shortAnswer: "PropTypes is a type-checking library for React props.",
       longAnswer:
-        "useContext() is a hook that allows functional components to subscribe to context values. It eliminates the need to use Context.Consumer and provides a more convenient way to access context data.",
+        "PropTypes allows you to define the expected types of props passed to a component. It helps catch bugs by validating prop types during development.",
+      codeExample: `
+        import PropTypes from 'prop-types';
+        function MyComponent({ name }) {
+          return <div>{name}</div>;
+        }
+        MyComponent.propTypes = {
+          name: PropTypes.string.isRequired,
+        };
+      `,
     },
     {
-      question: "What is PropTypes in React?",
+      question: "What is React Strict Mode?",
       shortAnswer:
-        "PropTypes is a library for runtime type-checking of props in React components.",
+        "Strict Mode highlights potential problems in your application.",
       longAnswer:
-        "PropTypes allows you to specify the expected types for props in a React component, providing warnings in development when props do not match the expected types. It's helpful for catching bugs early in development.",
+        "React Strict Mode is a tool for identifying potential issues in your app. It activates additional checks and warnings for deprecated features and unsafe lifecycle methods.",
+      codeExample: `
+        function App() {
+          return (
+            <React.StrictMode>
+              <MyComponent />
+            </React.StrictMode>
+          );
+        }
+      `,
     },
     {
-      question:
-        "What is the difference between static and dynamic imports in React?",
-      shortAnswer:
-        "Static imports are resolved at compile-time, while dynamic imports are resolved at runtime.",
+      question: "What is React Refs?",
+      shortAnswer: "Refs provide a way to access DOM nodes or React elements.",
       longAnswer:
-        "Static imports are imported at the top of the file and are bundled during the build process, while dynamic imports use the import() function to load modules only when needed, allowing for lazy loading and reducing the initial bundle size.",
+        "Refs are used to directly access DOM nodes or React elements. They are commonly used for managing focus, text selection, or integrating with third-party libraries.",
+      codeExample: `
+        function MyComponent() {
+          const inputRef = useRef();
+          return <input ref={inputRef} />;
+        }
+      `,
+    },
+    {
+      question: "What is React Higher-Order Components (HOC)?",
+      shortAnswer:
+        "HOCs are functions that take a component and return a new component.",
+      longAnswer:
+        "Higher-Order Components are functions that accept a component and return a new component with additional props or behavior. They are used for code reuse and logic sharing.",
+      codeExample: `
+        function withLogging(WrappedComponent) {
+          return function(props) {
+            console.log('Rendered:', WrappedComponent.name);
+            return <WrappedComponent {...props} />;
+          };
+        }
+      `,
+    },
+    {
+      question: "What is React Render Props?",
+      shortAnswer:
+        "Render Props is a pattern for sharing code between components.",
+      longAnswer:
+        "Render Props is a technique where a component's prop is a function that returns a React element. This allows components to share logic without using HOCs.",
+      codeExample: `
+        function DataProvider({ render }) {
+          const data = fetchData();
+          return render(data);
+        }
+      `,
+    },
+    {
+      question: "What is React Context vs Redux?",
+      shortAnswer:
+        "Context is built into React, while Redux is a standalone library.",
+      longAnswer:
+        "React Context is a built-in feature for sharing data across the component tree. Redux is a standalone library with advanced features like middleware and time-travel debugging.",
+    },
+    {
+      question: "What is React DevTools?",
+      shortAnswer:
+        "React DevTools is a browser extension for debugging React apps.",
+      longAnswer:
+        "React DevTools is a browser extension that allows you to inspect the React component hierarchy, view props and state, and debug performance issues.",
+    },
+    {
+      question: "What is React PureComponent?",
+      shortAnswer:
+        "PureComponent is a class component that implements shouldComponentUpdate.",
+      longAnswer:
+        "PureComponent is a class component that automatically implements shouldComponentUpdate with a shallow prop and state comparison. It prevents unnecessary re-renders.",
+      codeExample: `
+        class MyComponent extends React.PureComponent {
+          render() {
+            return <div>{this.props.value}</div>;
+          }
+        }
+      `,
+    },
+    {
+      question: "What is React Keys?",
+      shortAnswer:
+        "Keys help React identify which items have changed, been added, or removed.",
+      longAnswer:
+        "Keys are special attributes used by React to identify elements in a list. They help React efficiently update the UI by tracking changes to the list.",
+      codeExample: `
+        function List({ items }) {
+          return (
+            <ul>
+              {items.map((item) => (
+                <li key={item.id}>{item.name}</li>
+              ))}
+            </ul>
+          );
+        }
+      `,
+    },
+    {
+      question: "What is React Children?",
+      shortAnswer:
+        "React Children is a utility for working with child components.",
+      longAnswer:
+        "React.Children provides utilities for working with child components, such as mapping over children or counting them.",
+      codeExample: `
+        function MyComponent({ children }) {
+          return <div>{React.Children.map(children, (child) => child)}</div>;
+        }
+      `,
+    },
+    {
+      question: "What is React SyntheticEvent?",
+      shortAnswer:
+        "SyntheticEvent is a cross-browser wrapper around native browser events.",
+      longAnswer:
+        "SyntheticEvent is a wrapper around native browser events that provides a consistent API across different browsers. It is used in React event handlers.",
+      codeExample: `
+        function MyComponent() {
+          const handleClick = (e) => {
+            console.log(e.target);
+          };
+          return <button onClick={handleClick}>Click Me</button>;
+        }
+      `,
+    },
+    {
+      question: "What is React Reconciliation?",
+      shortAnswer:
+        "Reconciliation is the process of updating the DOM to match the Virtual DOM.",
+      longAnswer:
+        "Reconciliation is the algorithm React uses to compare the Virtual DOM with the real DOM and apply the necessary updates. It ensures efficient rendering.",
+    },
+    {
+      question: "What is React Context vs Props Drilling?",
+      shortAnswer:
+        "Context avoids prop drilling by sharing data across the component tree.",
+      longAnswer:
+        "Prop drilling is the process of passing props through multiple levels of components. Context API avoids this by allowing data to be shared across the component tree without passing props manually.",
+    },
+    {
+      question: "What is React ForwardRef?",
+      shortAnswer: "ForwardRef allows passing refs to child components.",
+      longAnswer:
+        "ForwardRef is a technique for passing refs from a parent component to a child component. It is useful for accessing DOM nodes in child components.",
     },
   ];
 
